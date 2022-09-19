@@ -1,5 +1,16 @@
 ---
+import Card from '../components/Card.astro';
 import Layout from '../layouts/Layout.astro';
+
+const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
+const data = await response.json();
+const pokemons = data.results.map((pokemon, i) => ({
+  ...pokemon,
+  id: i + 1,
+  img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${
+    i + 1
+  }.svg`,
+}));
 ---
 
 <Layout title="PokeAstro">
@@ -7,5 +18,9 @@ import Layout from '../layouts/Layout.astro';
     <h1 class="text-center text-4xl my-2">
       Welcome to <span style="color: blueviolet;">PokeAstro</span>
     </h1>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 place-items-center">
+      {pokemons.map(({ name, id, img }) => <Card name={name} id={id} img={img} />)}
+    </div>
   </main>
 </Layout>
